@@ -45,12 +45,15 @@ extension R {
     }
 
     public class func applySpec<A, B, C, D>(_ object: [String: (A, B, C) -> D]) -> (A, B, C) -> [String: D] {
-
         return { first, second, third in
             object.reduce(into: [String: D]()) { (current, next) in
                 current[next.key] = next.value(first, second, third)
             }
         }
+    }
+
+    public class func applySpec<A, B>() -> ([String: (A) -> B]) -> (A) -> [String: B] {
+        return { function in { val in applySpec(function)(val) } }
     }
 
 }
